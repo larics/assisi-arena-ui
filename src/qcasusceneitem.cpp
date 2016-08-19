@@ -1,12 +1,14 @@
 #include "qcasusceneitem.h"
 
 QCasuSceneItem::QCasuSceneItem(QObject *parent, int x, int y, double yaw, QCasuTreeItem *widget) : QObject(parent),
-    x_center(x),
-    y_center(y),
-    yaw_((int)(yaw*180/PI)),
     //ANIMATION
     airflowAngle(0),
     vibrAngle(0),
+    //CASU PARAMETERS
+    x_center(x),
+    y_center(y),
+    yaw_((int)(yaw*180/PI)),
+    inGroup(false),
     //WIDGET
     treeItem(widget)
 {
@@ -45,7 +47,8 @@ void QCasuSceneItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
             brush.setColor(Qt::black);
             painter->setBrush(brush);
             double value;
-            if(treeItem->connected) value = treeItem->widget_IR_children[k]->data(1,Qt::DisplayRole).toDouble() / 5000;
+            // Scale sensor reading pie to be ~18cm (~3x the edge of CASU ring) at maximum reading value (2^16)
+            if(treeItem->connected) value = treeItem->widget_IR_children[k]->data(1,Qt::DisplayRole).toDouble() / 65536 * 1.8;
             else value = 0;
             painter->drawPie(QIRTriangle(QPointF(x_center, y_center),yaw_ + k*60, value), (yaw_ + k*60 - 25)*16, 50*16); // 0° is at 3 o'clock, ccw direction
         }
@@ -87,7 +90,8 @@ void QCasuSceneItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 
     // - Configurating pen and brush parameters
     pen.setWidth(2);
-    if(treeItem->connected)pen.setColor(Qt::green);
+    if(this->isSelected() && inGroup)pen.setColor(groupColor);
+    else if(treeItem->connected)pen.setColor(Qt::green);
     else pen.setColor(Qt::red);
 
 
@@ -101,9 +105,9 @@ void QCasuSceneItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
         treeItem->resetSelection();
     }
 
-    if(treeItem->led_on)brush.setColor(treeItem->led_color);
+    if(treeItem->ledON)brush.setColor(treeItem->ledColor);
     else brush.setColor(Qt::gray);
-    if(treeItem->child_selected)brush.setStyle(Qt::Dense3Pattern);
+    if(treeItem->child_selected)brush.setStyle(Qt::Dense2Pattern);
 
     painter->setPen(pen);
     painter->setBrush(brush);
@@ -121,7 +125,7 @@ void QCasuSceneItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
         brush.setColor(QColor(250, 218, 94, 96));
         painter->setPen(pen);
         painter->setBrush(brush);
-        airflowAngle = fmod(airflowAngle + value * 12 * FPSrepaint, 360); // 30 FPS, max_speed = 12 deg/frame -> w = 1 rpm
+        airflowAngle = fmod(airflowAngle + value * 6 * FPSrepaint, 360); // 30 FPS, max_speed = 6 deg/frame -> w = 0.5 rpm __ CURRENTLY THERE IS ONLY ONE INTENSITY, WHEN INTESITY RANGE WILL BE ENABLED, MAX_SPEED SHOULD BE 12
         painter->drawPath(QPetal(QPointF(x_center,y_center),airflowAngle));       // petal 1
         painter->drawPath(QPetal(QPointF(x_center,y_center),airflowAngle + 120)); // petal 2
         painter->drawPath(QPetal(QPointF(x_center,y_center),airflowAngle - 120)); // petal 3
@@ -130,7 +134,7 @@ void QCasuSceneItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     //paint vibration marker
     if(settings->value("vibr_on").toBool() && treeItem->connected && treeItem->vibrON){
         double freq = treeItem->widget_setpoints_vibr_children[0]->data(1,Qt::DisplayRole).toDouble();
-        double amplitude = treeItem->widget_setpoints_vibr_children[1]->data(1,Qt::DisplayRole).toDouble();
+        //double amplitude = treeItem->widget_setpoints_vibr_children[1]->data(1,Qt::DisplayRole).toDouble();
 
         pen.setColor(QColor(255,255,255,96));
         pen.setWidth(2);
@@ -170,11 +174,11 @@ QIRTriangle::QIRTriangle(QPointF center, double angle, double value)
 
 QTempArc::QTempArc(QPointF center, double angle)
 {
-    double offset = settings->value("IR_on").toBool()? 42 : 30; // offset from center of CASU
+    double offset = 17.5; // offset from center of CASU
 
     span = 50 * 16; //Qt angles are in increments of 1°/16
     start = (angle - 25) * 16;
-    rect = QRectF(center.x()-offset/2, center.y()-offset/2, offset, offset);
+    rect = QRectF(center.x()-offset, center.y()-offset, offset*2, offset*2);
 }
 
 QPetal::QPetal(QPointF center, double angle){
