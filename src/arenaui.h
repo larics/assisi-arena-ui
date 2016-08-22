@@ -23,6 +23,8 @@
 #include "qtrendplot.h"
 #include "qdeploy.h"
 #include "qgstreamerview.h"
+#include "qgraphicsviewzoom.h"
+
 
 
 
@@ -38,6 +40,8 @@ class ArenaUI;
 class QArenaScene : public QGraphicsScene
 {
     Q_OBJECT
+protected:
+    void drawBackground(QPainter *painter, const QRectF &rect);
 public:
     QCasuTreeItem *selectionTreeWidget;
     QArenaScene(QWidget *parent);
@@ -72,10 +76,6 @@ private:
      */
     YAML::Node assisiNode;
 
-    /*!
-     * \brief Main widget which carries tabWidget and videoStream widget, and enables configurable size ratio between them
-     */
-    QSplitter* sideLayout;
     /*!
      * \brief Tab in which trend plots are docked
      */

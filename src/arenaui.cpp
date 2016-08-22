@@ -27,11 +27,6 @@ ArenaUI::ArenaUI(QWidget *parent) :
     ui->setupUi(this);
     ui->actionToggleLog->setChecked(settings->value("log_on").toBool());
 
-    sideLayout = new QSplitter;
-    ui->centralWidget->layout()->addWidget(sideLayout);
-    sideLayout->setOrientation(Qt::Vertical);
-    sideLayout->addWidget(ui->tabWidget);
-
     //CASU TREE TAB
     ui->casuTree->addAction(ui->actionPlot_selected_in_same_trend);
     ui->casuTree->addAction(ui->actionPlot_selected_in_different_trends);
@@ -61,6 +56,8 @@ ArenaUI::ArenaUI(QWidget *parent) :
     arenaScene->setSceneRect(0,0,800,800);
     ui->arenaSpace->setScene(arenaScene);
     ui->arenaSpace->setDragMode(QGraphicsView::RubberBandDrag);
+    new QGraphicsViewZoom(ui->arenaSpace);
+
 
     MouseClickHandler* click_handler = new MouseClickHandler(arenaScene, this);
     arenaScene->installEventFilter(click_handler);
@@ -275,6 +272,22 @@ bool MouseClickHandler::eventFilter(QObject* obj, QEvent* event)
 //-------------------------------------------------------------------------------
 // Subclassed QGraphicsScene for a BUG [QTBUG-10138]
 // http://www.qtcentre.org/threads/36953-QGraphicsItem-deselected-on-contextMenuEvent
+void QArenaScene::drawBackground(QPainter *painter, const QRectF &rect)
+{
+    Q_UNUSED(rect)
+    painter->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform, true);
+
+    QPen pen;
+    QBrush brush;
+    pen.setColor(Qt::transparent);
+    brush.setColor(Qt::lightGray);
+    brush.setStyle(Qt::SolidPattern);
+
+    painter->setPen(pen);
+    painter->setBrush(brush);
+    painter->drawEllipse(0,0,800,800);
+}
+
 QArenaScene::QArenaScene(QWidget *parent) : QGraphicsScene(parent){
     this->setItemIndexMethod(QGraphicsScene::NoIndex);
     connect(this,SIGNAL(selectionChanged()),SLOT(checkSelection()));
@@ -545,11 +558,14 @@ void ArenaUI::on_actionPlot_selected_in_different_trends_triggered()
         while(parent->parent()) parent = parent->parent();
         QColor color = parent->textColor(0);
         QString name = item->text(0);
+        QString parentName = parent->text(0);
 
         foreach (QGraphicsItem* casuItem, arenaScene->items()) {
             if(casuItem->childItems().size()) continue;
-            if(((QCasuSceneItem*)casuItem)->groupColor != color) continue;
+            if(((QCasuSceneItem*)casuItem)->groupColor != color && !QString::compare(parentName, "CASU group")) continue;
+            if(!casuItem->isSelected() && !QString::compare(parentName, "Selected CASUs")) continue;
             selectedList.append(((QCasuSceneItem*)casuItem)->treeItem->widgetMap[name]);
+
         }
     }
 
@@ -805,7 +821,7 @@ void ArenaUI::on_actionSave_triggered()
 void ArenaUI::on_actionCamera_toggled(bool arg1)
 {
     if(arg1){
-        videoStream = new QGstreamerView(sideLayout);
+        videoStream = new QGstreamerView(ui->sideLayout);
     }
     if(!arg1){
         videoStream->deleteLater();
