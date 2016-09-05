@@ -35,18 +35,17 @@ SOURCES += main.cpp\
         qdialogsetpoint.cpp \
         flowlayout.cpp \
         qdeploy.cpp \
-#        qgstreamerview.cpp
+        qgstreamerview.cpp \
+        qdialogconnect.cpp \
         qcasuscenegroup.cpp \
-    qgraphicsviewzoom.cpp \
-    qarenascene.cpp \
-    qcasuzmq.cpp \
-    qcasutreegroup.cpp \
-    qabstractsceneitem.cpp \
-    qabstracttreeitem.cpp \
-    qdialogconnect.cpp
+        qgraphicsviewzoom.cpp \
+        qarenascene.cpp \
+        qcasuzmq.cpp \
+        qcasutreegroup.cpp \
+        qabstractsceneitem.cpp \
+        qabstracttreeitem.cpp \
 
-
-HEADERS  += arenaui.h\
+HEADERS  += arenaui.h \
         nzmqt/nzmqt.hpp \
         QCustomPlot/qcustomplot.h \
         qcasusceneitem.h \
@@ -57,16 +56,15 @@ HEADERS  += arenaui.h\
         qdialogsetpoint.h \
         flowlayout.h \
         qdeploy.h \
-#        qgstreamerview.h
-    qcasuscenegroup.h \
-    qgraphicsviewzoom.h \
-    qarenascene.h \
-    qcasuzmq.h \
-    qabstractsceneitem.h \
-    qabstracttreeitem.h \
-    qcasutreegroup.h \
-    qdialogconnect.h
-
+        qgstreamerview.h \
+        qdialogconnect.h \
+        qcasutreegroup.h \
+        qcasuscenegroup.h \
+        qgraphicsviewzoom.h \
+        qarenascene.h \
+        qcasuzmq.h \
+        qabstractsceneitem.h \
+        qabstracttreeitem.h
 
 FORMS    += arenaui.ui \
     qdialogconnect.ui \
@@ -75,11 +73,10 @@ FORMS    += arenaui.ui \
 
 LIBS += -lzmq\
         -lprotobuf\
-        -lyaml-cpp
+        -lyaml-cpp\
+        -lQt5GStreamer-1.0 \
+        -lQt5GStreamerUi-1.0
 
-
-#CONFIG += link_pkgconfig
-#PKGCONFIG += Qt5GStreamer-1.0 Qt5GStreamerUi-1.0
 
 RESOURCES += \
     images.qrc

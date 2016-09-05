@@ -203,8 +203,6 @@ bool MouseClickHandler::eventFilter(QObject* obj, QEvent* event)
     }
 }
 
-// -------------------------------------------------------------------------------
-
 void ArenaUI::on_actionOpenArena_triggered()
 {
     QProgressBar progress;
@@ -682,9 +680,9 @@ void ArenaUI::on_actionSave_triggered()
 void ArenaUI::on_actionCamera_toggled(bool arg1)
 {
     if(arg1){
-        //videoStream = new QGstreamerView(sideLayout);
+        videoStream = new QGstreamerView(ui->sideLayout);
     }
     if(!arg1){
-        //videoStream->deleteLater();
+        videoStream->deleteLater();
     }
 }

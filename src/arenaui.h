@@ -24,8 +24,9 @@
 #include "qtrendplot.h"
 #include "flowlayout.h"
 #include "qdeploy.h"
+#include "qgstreamerview.h"
 #include "qgraphicsviewzoom.h"
-//#include "qgstreamerview.h"
+
 
 
 
@@ -63,7 +64,31 @@ private:
      */
     QVBoxLayout* m_trendTab;
 
-    //QGstreamerView* videoStream;
+    QVBoxLayout* trendTab;
+    /*!
+     * \brief Custom widget for deployment
+     */
+    QDeploy* deployWidget;
+    /*!
+     * \brief Pointer to shell output scroll area
+     */
+    QScrollArea* deployScroll;
+    /*!
+     * \brief Pointer to QLabel for showing loaded associated file
+     */
+    QLabel* deployArena;
+    /*!
+     * \brief Pointer to QLabel for showing loaded associated file
+     */
+    QLabel* deployFile;
+    /*!
+     * \brief Pointer to QLabel for showing loaded associated file
+     */
+    QLabel* deployNeighborhood;
+    /*!
+     * \brief Custom widget for video streaming
+     */
+    QGstreamerView* videoStream;
 
     /*!
      * \brief Timer responsible for 30FPS graphics scene refresh rate
