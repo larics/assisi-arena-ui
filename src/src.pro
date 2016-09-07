@@ -10,7 +10,7 @@ QT       += core gui\
 
 TARGET = arena-ui
 TEMPLATE = app
-CONFIG += c++11
+CONFIG += c++11 warn_on
 
 DESTDIR = ../build/bin
 MOC_DIR = ../build/moc
