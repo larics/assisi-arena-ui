@@ -19,7 +19,7 @@ RCC_DIR = ../build/rcc
 UI_DIR = ../build/ui
 OBJECTS_DIR = ../build/o
 
-INCLUDEPATH += msg \
+INCLUDEPATH += msg
 
 SOURCES += main.cpp\
         arenaui.cpp\
@@ -66,17 +66,16 @@ HEADERS  += arenaui.h \
         qabstractsceneitem.h \
         qabstracttreeitem.h
 
-FORMS    += arenaui.ui \
-    qdialogconnect.ui \
-    qdialogsettings.ui \
-    qdialogsetpoint.ui
+FORMS += arenaui.ui \
+         qdialogconnect.ui \
+         qdialogsettings.ui \
+         qdialogsetpoint.ui
 
-LIBS += -lzmq\
-        -lprotobuf\
-        -lyaml-cpp\
+LIBS += -lzmq \
+        -lprotobuf \
+        -lyaml-cpp \
         -lQt5GStreamer-1.0 \
         -lQt5GStreamerUi-1.0
 
 
-RESOURCES += \
-    images.qrc
+RESOURCES += images.qrc

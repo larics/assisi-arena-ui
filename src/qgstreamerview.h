@@ -7,12 +7,12 @@
 #include <QMenu>
 #include <QSplitter>
 
-#include <QGst/Init>
-#include <QGst/Ui/GraphicsVideoSurface>
-#include <QGst/Ui/GraphicsVideoWidget>
-#include <QGst/Pipeline>
-#include <QGst/Element>
-#include <QGst/ElementFactory>
+#include <Qt5GStreamer/QGst//Init>
+#include <Qt5GStreamer/QGst//Ui/GraphicsVideoSurface>
+#include <Qt5GStreamer/QGst//Ui/GraphicsVideoWidget>
+#include <Qt5GStreamer/QGst//Pipeline>
+#include <Qt5GStreamer/QGst//Element>
+#include <Qt5GStreamer/QGst//ElementFactory>
 
 class QGstreamerView : public QGraphicsView
 {

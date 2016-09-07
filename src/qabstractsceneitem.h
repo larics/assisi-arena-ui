@@ -1,10 +1,9 @@
 #ifndef QABSTRACTSCENEITEM_H
 #define QABSTRACTSCENEITEM_H
-
+// TODO: Replace macros with template functions
 #define sCast(x) dynamic_cast<QAbstractSceneItem *>(x)
 #define siCast(x) dynamic_cast<QCasuSceneItem *>(x)
 #define sgCast(x) dynamic_cast<QCasuSceneGroup *>(x)
-
 
 #include <memory>
 

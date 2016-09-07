@@ -1,6 +1,6 @@
 #ifndef QABSTRACTTREEITEM_H
 #define QABSTRACTTREEITEM_H
-
+// TODO: Replace macros with template functions
 #define tCast(x) dynamic_cast<QAbstractTreeItem* >(x)
 #define tiCast(x) dynamic_cast<QCasuTreeItem *>(x)
 #define tgCast(x) dynamic_cast<QCasuTreeGroup *>(x)
