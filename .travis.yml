@@ -1,22 +1,15 @@
-dist: xenial
+sudo: required
+language: ruby
 
-branches:
-  except:
-    - master_xenial
+services:
+  - docker
 
 before_install:
   - sudo apt-get update
 
 install:
-  - sudo apt-get install qt5-default qt5-qmake
-  - sudo apt-get install libqt5gstreamer-dev
-  - sudo apt-get install libzmq3-dev
-  - sudo apt-get install libprotobuf-dev protobuf-compiler
-  - sudo apt-get install libyaml-dev libyaml-cpp-dev libboost-dev
+  - docker build -t assisi .
 
 script:
-  - sh compile_msgs.sh
-  - qmake
-  - make
+  - docker run assisi /bin/sh -c "find /root/assisi-ui/build/bin/arena-ui"
 
-language: cpp
