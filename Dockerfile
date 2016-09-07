@@ -20,5 +20,6 @@ RUN apt-get -y install qt5-default \
 COPY . /root/assisi-ui
 
 ## build
+RUN cd /root/assisi-ui; sh compile_msgs.sh
 RUN cd /root/assisi-ui; qmake
-RUN cd /root/assisi-ui; make
+RUN cd /root/assisi-ui; make -j12
